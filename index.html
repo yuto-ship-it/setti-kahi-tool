@@ -69,7 +69,7 @@ h1 {
 }
 
 .input-row label {
-  width: 130px;
+  width: 220px;
   flex-shrink: 0;
 }
 
@@ -122,7 +122,6 @@ button:hover {
   font-size: 18px;
 }
 
-/* スマートフォン表示 */
 @media (max-width: 600px) {
   body {
     margin: 10px auto;
@@ -171,18 +170,19 @@ button:hover {
 
   <div class="point-content">
     <div class="input-area">
+
       <div class="input-row">
-        <label for="x1">X座標</label>
+        <label for="x1">基準点からの幅（X座標）</label>
         <input id="x1" type="number" step="any" placeholder="mm">
       </div>
 
       <div class="input-row">
-        <label for="y1">Y座標</label>
+        <label for="y1">基準点からの高さ（Y座標）</label>
         <input id="y1" type="number" step="any" placeholder="mm">
       </div>
 
       <div class="input-row">
-        <label for="z1">Z座標</label>
+        <label for="z1">基準点からの奥行（Z座標）</label>
         <input id="z1" type="number" step="any" placeholder="mm">
       </div>
 
@@ -196,6 +196,7 @@ button:hover {
           <option value="右側面">右側面</option>
         </select>
       </div>
+
     </div>
 
     <div class="image-area">
@@ -213,18 +214,19 @@ button:hover {
 
   <div class="point-content">
     <div class="input-area">
+
       <div class="input-row">
-        <label for="x2">X座標</label>
+        <label for="x2">基準点からの幅（X座標）</label>
         <input id="x2" type="number" step="any" placeholder="mm">
       </div>
 
       <div class="input-row">
-        <label for="y2">Y座標</label>
+        <label for="y2">基準点からの高さ（Y座標）</label>
         <input id="y2" type="number" step="any" placeholder="mm">
       </div>
 
       <div class="input-row">
-        <label for="z2">Z座標</label>
+        <label for="z2">基準点からの奥行（Z座標）</label>
         <input id="z2" type="number" step="any" placeholder="mm">
       </div>
 
@@ -232,11 +234,13 @@ button:hover {
         <label for="direction2">排気ダクトの向き</label>
         <select id="direction2">
           <option value="">選択してください</option>
-          <option value="下方">下方</option>
-          <option value="左側面">左側面</option>
-          <option value="右側面">右側面</option>
+          <option value="下方（天井取付）">下方（天井取付）</option>
+          <option value="後方（背面取付）">後方（背面取付）</option>
+          <option value="左側面（壁面取付）">左側面（壁面取付）</option>
+          <option value="右側面（壁面取付）">右側面（壁面取付）</option>
         </select>
       </div>
+
     </div>
 
     <div class="image-area">
@@ -285,7 +289,7 @@ function judgeInstallation() {
     direction2 === ""
   ) {
     result.className = "error";
-    result.textContent = "座標と向きをすべて入力してください";
+    result.textContent = "数値と向きをすべて入力してください";
     return;
   }
 
