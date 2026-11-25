@@ -97,6 +97,11 @@ button:hover {
   background: #125ca1;
 }
 
+button:disabled {
+  background: #999;
+  cursor: wait;
+}
+
 #result {
   margin-top: 20px;
   padding: 22px;
@@ -120,6 +125,14 @@ button:hover {
   background: #fff3e0;
   color: #e65100;
   font-size: 18px;
+}
+
+#saveStatus {
+  min-height: 24px;
+  margin-top: 10px;
+  color: #555;
+  text-align: center;
+  font-size: 14px;
 }
 
 @media (max-width: 600px) {
@@ -253,7 +266,11 @@ button:hover {
   </div>
 </div>
 
-<button type="button" onclick="judgeInstallation()">
+<button
+  id="judgeButton"
+  type="button"
+  onclick="judgeInstallation()"
+>
   設置可否を判定
 </button>
 
@@ -261,14 +278,24 @@ button:hover {
   座標と向きを入力してください
 </div>
 
+<div id="saveStatus"></div>
+
 <script>
 const LIMIT_AREA_MM2 = 100000;
 
+/*
+  Apps Scriptで発行されたウェブアプリURLに変更してください。
+*/
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbw2M3srcQ1fjuvUhrJysBjH0m2xS59wZkeXa7eIxPhs9W0YDJNwAiTYhAA0LWfiUWYk/exec";
+
 function getNumber(id) {
-  return Number(document.getElementById(id).value);
+  return Number(
+    document.getElementById(id).value
+  );
 }
 
-function judgeInstallation() {
+async function judgeInstallation() {
   const x1 = getNumber("x1");
   const y1 = getNumber("y1");
   const z1 = getNumber("z1");
@@ -277,19 +304,36 @@ function judgeInstallation() {
   const y2 = getNumber("y2");
   const z2 = getNumber("z2");
 
-  const direction1 = document.getElementById("direction1").value;
-  const direction2 = document.getElementById("direction2").value;
-  const result = document.getElementById("result");
+  const direction1 =
+    document.getElementById("direction1").value;
 
-  const coordinates = [x1, y1, z1, x2, y2, z2];
+  const direction2 =
+    document.getElementById("direction2").value;
+
+  const result =
+    document.getElementById("result");
+
+  const saveStatus =
+    document.getElementById("saveStatus");
+
+  const judgeButton =
+    document.getElementById("judgeButton");
+
+  const coordinates = [
+    x1, y1, z1, x2, y2, z2
+  ];
 
   if (
-    coordinates.some(value => !Number.isFinite(value)) ||
+    coordinates.some(
+      value => !Number.isFinite(value)
+    ) ||
     direction1 === "" ||
     direction2 === ""
   ) {
     result.className = "error";
-    result.textContent = "数値と向きをすべて入力してください";
+    result.textContent =
+      "数値と向きをすべて入力してください";
+    saveStatus.textContent = "";
     return;
   }
 
@@ -303,13 +347,61 @@ function judgeInstallation() {
     crossZ ** 2
   );
 
+  let judgement;
+
   if (areaMm2 >= LIMIT_AREA_MM2) {
     result.className = "possible";
-    result.textContent = "設置可能";
+    judgement = "設置可能";
   } else {
     result.className = "impossible";
-    result.textContent = "設置不可";
+    judgement = "設置不可";
   }
+
+  result.textContent = judgement;
+
+  const data = {
+    x1: x1,
+    y1: y1,
+    z1: z1,
+    direction1: direction1,
+    x2: x2,
+    y2: y2,
+    z2: z2,
+    direction2: direction2,
+    areaMm2: Math.round(areaMm2 * 100) / 100,
+    result: judgement
+  };
+
+  judgeButton.disabled = true;
+  saveStatus.textContent =
+    "判定結果を保存しています";
+
+  try {
+    await saveToGoogleSheet(data);
+
+    saveStatus.textContent =
+      "判定結果を保存しました";
+
+  } catch (error) {
+    console.error(error);
+
+    saveStatus.textContent =
+      "判定は完了しましたが、保存に失敗しました";
+
+  } finally {
+    judgeButton.disabled = false;
+  }
+}
+
+async function saveToGoogleSheet(data) {
+  await fetch(API_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify(data)
+  });
 }
 </script>
 
