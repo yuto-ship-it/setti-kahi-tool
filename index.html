@@ -283,11 +283,8 @@ button:disabled {
 <script>
 const LIMIT_AREA_MM2 = 100000;
 
-/*
-  Apps Scriptで発行されたウェブアプリURLに変更してください。
-*/
 const API_URL =
-  "https://script.google.com/a/macros/fujioh-gworkspace.com/s/AKfycbyTA8GYdauhuERaXqLfkKYbJzYFNDRmu27gbasrxMZ7fMWPXT9JjYW-5L1MsCjJ-3n5/exec";
+  "ここに/execで終わるURLを貼り付け";
 
 function getNumber(id) {
   return Number(
@@ -333,7 +330,6 @@ async function judgeInstallation() {
     result.className = "error";
     result.textContent =
       "数値と向きをすべて入力してください";
-    saveStatus.textContent = "";
     return;
   }
 
@@ -347,63 +343,55 @@ async function judgeInstallation() {
     crossZ ** 2
   );
 
-  let judgement;
+  const judgement =
+    areaMm2 >= LIMIT_AREA_MM2
+      ? "設置可能"
+      : "設置不可";
 
-  if (areaMm2 >= LIMIT_AREA_MM2) {
-    result.className = "possible";
-    judgement = "設置可能";
-  } else {
-    result.className = "impossible";
-    judgement = "設置不可";
-  }
+  result.className =
+    judgement === "設置可能"
+      ? "possible"
+      : "impossible";
 
   result.textContent = judgement;
 
   const data = {
-    x1: x1,
-    y1: y1,
-    z1: z1,
-    direction1: direction1,
-    x2: x2,
-    y2: y2,
-    z2: z2,
-    direction2: direction2,
-    areaMm2: Math.round(areaMm2 * 100) / 100,
+    x1,
+    y1,
+    z1,
+    direction1,
+    x2,
+    y2,
+    z2,
+    direction2,
+    areaMm2,
     result: judgement
   };
 
   judgeButton.disabled = true;
   saveStatus.textContent =
-    "判定結果を保存しています";
+    "保存処理を実行しています";
 
   try {
-    await saveToGoogleSheet(data);
+    await fetch(API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(data)
+    });
 
     saveStatus.textContent =
-      "判定結果を保存しました";
+      "スプレッドシートへ保存しました";
 
   } catch (error) {
     console.error(error);
 
     saveStatus.textContent =
-      "判定は完了しましたが、保存に失敗しました";
+      "保存に失敗しました。URLを確認してください";
 
   } finally {
     judgeButton.disabled = false;
   }
 }
-
-async function saveToGoogleSheet(data) {
-  await fetch(API_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain"
-    },
-    body: JSON.stringify(data)
-  });
-}
 </script>
-
 </body>
 </html>
