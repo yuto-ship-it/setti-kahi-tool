@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>設置可否判定</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  color: #222;
+  background: #f7f7f7;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.point {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.point h2 {
+  font-size: 18px;
+  margin: 0 0 15px;
+}
+
+.point-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.input-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.image-area {
+  width: 42%;
+  flex-shrink: 0;
+}
+
+.guide-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.input-row label {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+input,
+select {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  background: #1976d2;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #125ca1;
+}
+
+#result {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.possible {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.impossible {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.error {
+  background: #fff3e0;
+  color: #e65100;
+  font-size: 18px;
+}
+
+/* スマートフォン表示 */
+@media (max-width: 600px) {
+  body {
+    margin: 10px auto;
+    padding: 12px;
+  }
+
+  .point-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .image-area {
+    order: 1;
+    width: 100%;
+  }
+
+  .input-area {
+    order: 2;
+    width: 100%;
+  }
+
+  .input-row {
+    display: block;
+  }
+
+  .input-row label {
+    display: block;
+    width: auto;
+    margin-bottom: 4px;
+  }
+
+  input,
+  select {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>設置可否判定</h1>
+
+<div class="point">
+  <h2>レンジフード排気口位置</h2>
+
+  <div class="point-content">
+    <div class="input-area">
+      <div class="input-row">
+        <label for="x1">X座標</label>
+        <input id="x1" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="y1">Y座標</label>
+        <input id="y1" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="z1">Z座標</label>
+        <input id="z1" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="direction1">排気口の向き</label>
+        <select id="direction1">
+          <option value="">選択してください</option>
+          <option value="上方">上方</option>
+          <option value="後方">後方</option>
+          <option value="左側面">左側面</option>
+          <option value="右側面">右側面</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="image-area">
+      <img
+        src="排気口位置.png"
+        alt="レンジフード排気口位置の説明図"
+        class="guide-image"
+      >
+    </div>
+  </div>
+</div>
+
+<div class="point">
+  <h2>排気ダクト接続位置</h2>
+
+  <div class="point-content">
+    <div class="input-area">
+      <div class="input-row">
+        <label for="x2">X座標</label>
+        <input id="x2" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="y2">Y座標</label>
+        <input id="y2" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="z2">Z座標</label>
+        <input id="z2" type="number" step="any" placeholder="mm">
+      </div>
+
+      <div class="input-row">
+        <label for="direction2">排気ダクトの向き</label>
+        <select id="direction2">
+          <option value="">選択してください</option>
+          <option value="下方">下方</option>
+          <option value="左側面">左側面</option>
+          <option value="右側面">右側面</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="image-area">
+      <img
+        src="ダクト接続位置.png"
+        alt="排気ダクト接続位置の説明図"
+        class="guide-image"
+      >
+    </div>
+  </div>
+</div>
+
+<button type="button" onclick="judgeInstallation()">
+  設置可否を判定
+</button>
+
+<div id="result" class="error">
+  座標と向きを入力してください
+</div>
+
+<script>
+const LIMIT_AREA_MM2 = 100000;
+
+function getNumber(id) {
+  return Number(document.getElementById(id).value);
+}
+
+function judgeInstallation() {
+  const x1 = getNumber("x1");
+  const y1 = getNumber("y1");
+  const z1 = getNumber("z1");
+
+  const x2 = getNumber("x2");
+  const y2 = getNumber("y2");
+  const z2 = getNumber("z2");
+
+  const direction1 = document.getElementById("direction1").value;
+  const direction2 = document.getElementById("direction2").value;
+  const result = document.getElementById("result");
+
+  const coordinates = [x1, y1, z1, x2, y2, z2];
+
+  if (
+    coordinates.some(value => !Number.isFinite(value)) ||
+    direction1 === "" ||
+    direction2 === ""
+  ) {
+    result.className = "error";
+    result.textContent = "座標と向きをすべて入力してください";
+    return;
+  }
+
+  const crossX = y1 * z2 - z1 * y2;
+  const crossY = z1 * x2 - x1 * z2;
+  const crossZ = x1 * y2 - y1 * x2;
+
+  const areaMm2 = 0.5 * Math.sqrt(
+    crossX ** 2 +
+    crossY ** 2 +
+    crossZ ** 2
+  );
+
+  if (areaMm2 >= LIMIT_AREA_MM2) {
+    result.className = "possible";
+    result.textContent = "設置可能";
+  } else {
+    result.className = "impossible";
+    result.textContent = "設置不可";
+  }
+}
+</script>
+
+</body>
+</html>
